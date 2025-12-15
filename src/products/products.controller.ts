@@ -32,7 +32,7 @@ export class ProductsController {
     return this.productsService.remove(id);
   }
 
-  @Patch(':id/restore')
+  @Patch('/restore/:id')
   restoreProduct(@Param('id') id: string) {
     return this.productsService.restoreProduct(id);
   }
