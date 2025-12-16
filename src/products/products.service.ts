@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -52,7 +52,7 @@ export class ProductsService {
       }
     })
     if (!productExist) {
-      throw new Error('Product not found');
+      throw new NotFoundException('Producto no encontrado');
     }
     return ResponseProductDto.fromPrisma(productExist)
   }
@@ -64,7 +64,7 @@ export class ProductsService {
       },
     })
     if (!productExist) {
-      throw new Error('Product not found');
+      throw new NotFoundException('Producto no encontrado');
     }
     const product = await this.prisma.product.update({
       where: {
@@ -85,7 +85,7 @@ export class ProductsService {
       },
     })
     if (!productExist) {
-      throw new Error('Product not found');
+      throw new NotFoundException('Producto no encontrado');
     }
     const product = await this.prisma.product.update({
       where: {
@@ -108,7 +108,7 @@ export class ProductsService {
       },
     })
     if (!productExist) {
-      throw new Error('Product not found');
+      throw new NotFoundException('Producto no encontrado');
     }
     const product = await this.prisma.product.update({
       where: {

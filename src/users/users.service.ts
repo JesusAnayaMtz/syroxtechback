@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ResponseUserDto } from './dto/response-user.dto';
@@ -30,12 +29,11 @@ export class UsersService {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
-        isActive: true
       }
     })
 
     if (!user) {
-      throw new Error('Usuario no encontrado')
+      throw new NotFoundException('Usuario no encontrado')
     }
 
     return ResponseUserDto.fromPrisma(user)
@@ -50,7 +48,7 @@ export class UsersService {
     })
 
     if (!userExist) {
-      throw new Error('Usuario no encontrado')
+      throw new NotFoundException('Usuario no encontrado')
     }
 
     const user = await this.prisma.user.update({
@@ -73,7 +71,7 @@ export class UsersService {
     })
 
     if (!userExist) {
-      throw new Error('Usuario no encontrado')
+      throw new NotFoundException('Usuario no encontrado')
     }
 
     const user = await this.prisma.user.update({
@@ -83,6 +81,31 @@ export class UsersService {
       },
       data: {
         isActive: false
+      }
+    })
+
+    return ResponseUserDto.fromPrisma(user)
+  }
+
+  async restore(id: string) {
+    const userExist = await this.prisma.user.findUnique({
+      where: {
+        id,
+        isActive: false
+      }
+    })
+
+    if (!userExist) {
+      throw new NotFoundException('Usuario no encontrado')
+    }
+
+    const user = await this.prisma.user.update({
+      where: {
+        id,
+        isActive: false
+      },
+      data: {
+        isActive: true
       }
     })
 

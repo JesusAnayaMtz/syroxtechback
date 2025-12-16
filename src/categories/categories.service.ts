@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -18,7 +18,7 @@ export class CategoriesService {
     })
 
     if (categoryExists) {
-      throw new Error('Category already exists');
+      throw new BadRequestException('Categoria ya existe');
     }
 
     const category = await this.prisma.category.create({
@@ -40,7 +40,7 @@ export class CategoriesService {
       },
     });
     if (!category) {
-      throw new Error('Category not found');
+      throw new NotFoundException('Categoria no encontrada');
     }
     return ResponseCategoryDto.fromPrisma(category);
   }
@@ -53,7 +53,7 @@ export class CategoriesService {
       },
     });
     if (!categoryExists) {
-      throw new Error('Category not found');
+      throw new NotFoundException('Categoria no encontrada');
     }
 
     //validar que el nuevo nombre no exista
@@ -63,7 +63,7 @@ export class CategoriesService {
       },
     });
     if (categoryExists2) {
-      throw new Error('Category already exists');
+      throw new BadRequestException('Categoria ya existe');
     }
 
     const category = await this.prisma.category.update({
@@ -83,7 +83,7 @@ export class CategoriesService {
       },
     });
     if (!categoryExists) {
-      throw new Error('Category not found');
+      throw new NotFoundException('Category not found');
     }
 
     //no se elimina solo se deshabilita
@@ -105,7 +105,7 @@ export class CategoriesService {
       },
     });
     if (!categoryExists) {
-      throw new Error('Category not found');
+      throw new NotFoundException('Category not found');
     }
     const category = await this.prisma.category.update({
       where: {

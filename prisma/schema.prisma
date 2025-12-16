@@ -21,6 +21,7 @@ model User {
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  sales     Sale[]
 }
 
 model Category {
@@ -33,33 +34,34 @@ model Category {
 }
 
 model Product {
-  id          String   @id @default(uuid())
-  name        String   @unique
+  id          String     @id @default(uuid())
+  name        String     @unique
   description String
-  price       Decimal  @db.Decimal(10, 2)
-  isActive    Boolean  @default(true)
+  price       Decimal    @db.Decimal(10, 2)
+  isActive    Boolean    @default(true)
   categoryId  String
-  category    Category @relation(fields: [categoryId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  saleIntem SaleItem[]
+  category    Category   @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  saleItems   SaleItem[]
 }
 
 model Sale {
   id        String     @id @default(uuid())
   total     Decimal    @db.Decimal(10, 2)
   createdAt DateTime   @default(now())
+  userId    String
+  canceled  Boolean    @default(false)
+  user      User       @relation(fields: [userId], references: [id])
   items     SaleItem[]
 }
 
 model SaleItem {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(uuid())
   saleId    String
   productId String
   quantity  Int
   unitPrice Decimal @db.Decimal(10, 2)
-
-  sales   Sale    @relation(fields: [saleId], references: [id])
-  product Product @relation(fields: [productId], references: [id])
+  sale      Sale    @relation(fields: [saleId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
 }

@@ -18,8 +18,20 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('SyroxTech API')
     .setDescription('API de SyroxTech Backend')
-    .setVersion('1.0')
     .addTag('Categories')
+    .addTag('Products')
+    .addTag('Users')
+    .addTag('Auth')
+    .addTag('Sales')
+    .setVersion('1.0')
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      name: 'JWT',
+      description: 'Ingrese el token de autenticación',
+      in: 'header',
+    })
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

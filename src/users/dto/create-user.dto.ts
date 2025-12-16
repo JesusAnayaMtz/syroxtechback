@@ -33,12 +33,6 @@ export class CreateUserDto {
     @IsNotEmpty({ message: 'La contraseña del usuario no puede estar vacio' })
     password: string;
 
-    @ApiProperty({
-        description: 'Estado del usuario',
-        example: true,
-        default: true,
-        required: false,
-    })
     @IsOptional()
     @IsBoolean()
     isActive: boolean;
