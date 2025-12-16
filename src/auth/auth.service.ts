@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -26,7 +26,7 @@ export class AuthService {
     })
 
     if (userExists) {
-      throw new Error('El usuario ya existe');
+      throw new BadRequestException('El usuario ya existe');
     }
 
     const hashedPassword = await hash(createUserDto.password, 10);
@@ -51,13 +51,13 @@ export class AuthService {
     })
 
     if (!user) {
-      throw new Error('Credenciales Invalidas')
+      throw new UnauthorizedException('Credenciales Invalidas')
     }
 
     const isPasswordValid = await compare(loginDto.password, user.password);
 
     if (!isPasswordValid) {
-      throw new Error('Credenciales Invalidas')
+      throw new UnauthorizedException('Credenciales Invalidas')
     }
 
     const payload = { sub: user.id, email: user.email }

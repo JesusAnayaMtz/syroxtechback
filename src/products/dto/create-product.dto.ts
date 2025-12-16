@@ -34,12 +34,6 @@ export class CreateProductDto {
     @IsNumber()
     price: number;
 
-    @ApiProperty({
-        description: 'Estado de la categoria puede ir vacia por default es true',
-        example: true,
-        default: true,
-        required: false,
-    })
     @IsOptional()
     @IsBoolean()
     isActive: boolean;
