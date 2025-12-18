@@ -3,15 +3,19 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ResponseProductDto } from './dto/response-product.dto';
+import { CloudinaryService } from 'src/common/cloudinary/cloudinary.service';
 
 
 @Injectable()
 export class ProductsService {
 
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) { }
 
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, file: Express.Multer.File) {
     //Valida que el producto no exista
     const productExist = await this.prisma.product.findUnique({
       where: {
@@ -23,8 +27,20 @@ export class ProductsService {
       throw new ConflictException('El Producto ya existe')
     }
 
+    let imageUrl = null;
+    if (file) {
+      const result = await this.cloudinaryService.uploadImage(file);
+      // Ensure result is UploadApiResponse to access secure_url
+      if ('secure_url' in result) {
+        imageUrl = result.secure_url;
+      }
+    }
+
     const product = await this.prisma.product.create({
-      data: createProductDto,
+      data: {
+        ...createProductDto,
+        imageUrl,
+      },
       include: {
         category: true
       }
@@ -57,7 +73,7 @@ export class ProductsService {
     return ResponseProductDto.fromPrisma(productExist)
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto) {
+  async update(id: string, updateProductDto: UpdateProductDto, file: Express.Multer.File) {
     const productExist = await this.prisma.product.findUnique({
       where: {
         id,
@@ -66,11 +82,23 @@ export class ProductsService {
     if (!productExist) {
       throw new NotFoundException('Producto no encontrado');
     }
+
+    let imageUrl = productExist.imageUrl;
+    if (file) {
+      const result = await this.cloudinaryService.uploadImage(file);
+      if ('secure_url' in result) {
+        imageUrl = result.secure_url;
+      }
+    }
+
     const product = await this.prisma.product.update({
       where: {
         id,
       },
-      data: updateProductDto,
+      data: {
+        ...updateProductDto,
+        imageUrl,
+      },
       include: {
         category: true
       }
