@@ -7,6 +7,7 @@ export class ResponseProductDto {
     price: number;
     isActive: boolean;
     categoryName: string;
+    imageUrl: string | null;
     createdAt: Date;
     updatedAt: Date;
 
@@ -18,6 +19,7 @@ export class ResponseProductDto {
             price: product.price.toNumber(),
             isActive: product.isActive,
             categoryName: product.category.name,
+            imageUrl: product.imageUrl,
             createdAt: product.createdAt,
             updatedAt: product.updatedAt,
         }
