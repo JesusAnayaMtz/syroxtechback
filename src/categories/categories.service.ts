@@ -10,7 +10,7 @@ export class CategoriesService {
   constructor(private readonly prisma: PrismaService) { }
 
   async create(createCategoryDto: CreateCategoryDto) {
-    //validar que la categoria no exista
+    // Checamos si la categoria ya existe
     const categoryExists = await this.prisma.category.findUnique({
       where: {
         name: createCategoryDto.name
@@ -46,7 +46,7 @@ export class CategoriesService {
   }
 
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
-    //validar que la categoria exista
+    //validamos que la categoria exista
     const categoryExists = await this.prisma.category.findUnique({
       where: {
         id,
@@ -56,7 +56,7 @@ export class CategoriesService {
       throw new NotFoundException('Categoria no encontrada');
     }
 
-    //validar que el nuevo nombre no exista
+    // validamos que el nombre no exista el nuevo nombre
     const categoryExists2 = await this.prisma.category.findUnique({
       where: {
         name: updateCategoryDto.name,
@@ -76,7 +76,6 @@ export class CategoriesService {
   }
 
   async remove(id: string) {
-    //validamos que exista la categoria
     const categoryExists = await this.prisma.category.findUnique({
       where: {
         id,
@@ -86,7 +85,7 @@ export class CategoriesService {
       throw new NotFoundException('Category not found');
     }
 
-    //no se elimina solo se deshabilita
+    // no se elimia solo lo desactivamos
     const category = await this.prisma.category.update({
       where: {
         id,

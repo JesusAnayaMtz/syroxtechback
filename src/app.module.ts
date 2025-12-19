@@ -8,12 +8,13 @@ import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { SalesModule } from './sales/sales.module';
+import { ClientsModule } from './clients/clients.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
     isGlobal: true,
     envFilePath: '.env',
-  }), PrismaModule, CategoriesModule, ProductsModule, UsersModule, AuthModule, SalesModule],
+  }), PrismaModule, CategoriesModule, ProductsModule, UsersModule, AuthModule, SalesModule, ClientsModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -11,10 +11,10 @@ async function bootstrap() {
     transform: true,
   }))
 
-  // CORS
+  //en esta prueba dejamos el cors abierto
   app.enableCors();
 
-  // Swagger
+  //configracion de swagger
   const config = new DocumentBuilder()
     .setTitle('SyroxTech API')
     .setDescription('API de SyroxTech Backend')
@@ -22,6 +22,7 @@ async function bootstrap() {
     .addTag('Products')
     .addTag('Users')
     .addTag('Auth')
+    .addTag('Clients')
     .addTag('Sales')
     .setVersion('1.0')
     .addBearerAuth({

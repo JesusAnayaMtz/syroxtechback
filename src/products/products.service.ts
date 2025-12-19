@@ -16,7 +16,6 @@ export class ProductsService {
 
 
   async create(createProductDto: CreateProductDto, file: Express.Multer.File) {
-    //Valida que el producto no exista
     const productExist = await this.prisma.product.findUnique({
       where: {
         name: createProductDto.name

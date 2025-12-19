@@ -18,7 +18,7 @@ export class AuthService {
   async register(createUserDto: CreateUserDto) {
     const { name, email, password } = createUserDto;
 
-    //validamos que el usuario no exista
+    // Checamossi el usuario ya existe
     const userExists = await this.prisma.user.findUnique({
       where: {
         email: email
@@ -60,6 +60,7 @@ export class AuthService {
       throw new UnauthorizedException('Credenciales Invalidas')
     }
 
+    //creamos el payload con el id, nombre y email y ceramos el token usando el metodo sign
     const payload = { sub: user.id, name: user.name, email: user.email }
     return {
       access_token: this.jwtService.sign(payload)

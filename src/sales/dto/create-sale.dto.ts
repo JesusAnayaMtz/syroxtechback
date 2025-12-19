@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsNotEmpty, IsOptional } from "class-validator";
+import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { CreateSaleItemDto } from "./create-sale-item.dto";
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -7,6 +7,14 @@ export class CreateSaleDto {
     @IsOptional()
     @IsBoolean()
     canceled?: boolean;
+
+    @ApiProperty({
+        description: 'Id del cliente',
+        example: '7bde803a-049b-40bb-bcfd-d8fb1138bac0',
+        required: true
+    })
+    @IsString()
+    clientId: string;
 
     @ApiProperty({
         description: 'Lista de items de la venta',

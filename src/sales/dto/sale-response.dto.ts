@@ -5,6 +5,7 @@ export class SaleResponseDto {
     id: string;
     total: number;
     userId: string;
+    clientId: string | null;
     canceled: boolean;
     createdAt: Date;
     items: SaleItemResponseDto[];
@@ -14,6 +15,7 @@ export class SaleResponseDto {
             id: sale.id,
             total: sale.total.toNumber(),
             userId: sale.userId,
+            clientId: sale.clientId,
             canceled: sale.canceled,
             createdAt: sale.createdAt,
             items: sale.items.map(item => SaleItemResponseDto.fromPrisma(item))

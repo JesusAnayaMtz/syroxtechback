@@ -52,8 +52,10 @@ model Sale {
   total     Decimal    @db.Decimal(10, 2)
   createdAt DateTime   @default(now())
   userId    String
+  clientId  String?
   canceled  Boolean    @default(false)
   user      User       @relation(fields: [userId], references: [id])
+  client    Client?    @relation(fields: [clientId], references: [id])
   items     SaleItem[]
 }
 
@@ -65,4 +67,17 @@ model SaleItem {
   unitPrice Decimal @db.Decimal(10, 2)
   sale      Sale    @relation(fields: [saleId], references: [id])
   product   Product @relation(fields: [productId], references: [id])
+}
+
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  phone     String
+  address   String
+  zipCode   String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  sales     Sale[]
 }

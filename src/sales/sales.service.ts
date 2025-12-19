@@ -10,7 +10,7 @@ export class SalesService {
   constructor(private readonly prisma: PrismaService) { }
 
   async create(createSaleDto: CreateSaleDto, userId: string) {
-    //Validamos que los productos existan
+    // Validamos que los productos existan
     const productsIds = createSaleDto.items.map(item => item.productId);
     const products = await this.prisma.product.findMany({
       where: {
@@ -18,11 +18,21 @@ export class SalesService {
       }
     })
 
+    if (createSaleDto.clientId) {
+      const client = await this.prisma.client.findUnique({
+        where: { id: createSaleDto.clientId }
+      })
+
+      if (!client) {
+        throw new NotFoundException('El cliente no existe')
+      }
+    }
+
     if (products.length !== productsIds.length) {
       throw new NotFoundException('Uno o mas productos no existen')
     }
 
-    //si lor proudtcos existen calculamo el total y obtenemos precios
+    // Calcula el total y asigna los precios unitarios
     const items = createSaleDto.items.map(item => {
       const product = products.find(p => p.id === item.productId);
       return {
@@ -32,13 +42,14 @@ export class SalesService {
       }
     })
 
-    //ahora calculamo el total
     const total = items.reduce((sum, item) => sum + item.quantity * Number(item.unitPrice), 0);
 
+    //usamos prisma para crear la venta
     const sale = await this.prisma.sale.create({
       data: {
         total,
         userId,
+        clientId: createSaleDto.clientId,
         items: {
           create: items,
         },
@@ -102,7 +113,7 @@ export class SalesService {
       throw new NotFoundException('Venta no encontrada')
     }
 
-    //solo cambiamos el estatus de caceled a true
+    // Soft delete: mark sale as canceled
     const sale = await this.prisma.sale.update({
       where: {
         id

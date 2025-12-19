@@ -17,7 +17,8 @@ export class UsersController {
     return this.usersService.findAllActive();
   }
 
-  @Get()
+  @Get('all')
+  // Endpoint to retrieve all users (including inactive ones)
   findAll() {
     return this.usersService.findAll();
   }
