@@ -14,7 +14,8 @@ export class CreateSaleDto {
         required: true
     })
     @IsString()
-    clientId: string;
+    @IsOptional()
+    clientId: string | "Cliente General";
 
     @ApiProperty({
         description: 'Lista de items de la venta',
