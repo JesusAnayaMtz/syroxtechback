@@ -63,13 +63,15 @@ export class ClientsService {
       throw new NotFoundException('El cliente no existe');
     }
 
-    //validamos que el email no exista
-    const clientExits = await this.prisma.client.findUnique({
-      where: { email: updateClientDto.email }
-    })
+    //validamos que el email no exista si se esta actualizando
+    if (updateClientDto.email && updateClientDto.email !== client.email) {
+      const clientExits = await this.prisma.client.findUnique({
+        where: { email: updateClientDto.email }
+      })
 
-    if (clientExits) {
-      throw new BadRequestException('Ya existe un cliente con el correo proporcionado');
+      if (clientExits) {
+        throw new BadRequestException('Ya existe un cliente con el correo proporcionado');
+      }
     }
 
     const clientUpdated = await this.prisma.client.update({
