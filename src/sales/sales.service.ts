@@ -18,6 +18,16 @@ export class SalesService {
       }
     })
 
+    if (createSaleDto.clientId) {
+      const client = await this.prisma.client.findUnique({
+        where: { id: createSaleDto.clientId }
+      })
+
+      if (!client) {
+        throw new NotFoundException('El cliente no existe')
+      }
+    }
+
     if (products.length !== productsIds.length) {
       throw new NotFoundException('Uno o mas productos no existen')
     }
@@ -39,6 +49,7 @@ export class SalesService {
       data: {
         total,
         userId,
+        clientId: createSaleDto.clientId,
         items: {
           create: items,
         },
