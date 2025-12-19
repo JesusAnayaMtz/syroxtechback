@@ -6,6 +6,7 @@ export class ResponseClientDto {
     email: string;
     phone: string;
     address: string;
+    isActive: boolean;
     zipCode: string;
     createdAt: Date;
     updatedAt: Date;
@@ -17,6 +18,7 @@ export class ResponseClientDto {
             email: client.email,
             phone: client.phone,
             address: client.address,
+            isActive: client.isActive,
             zipCode: client.zipCode,
             createdAt: client.createdAt,
             updatedAt: client.updatedAt,
