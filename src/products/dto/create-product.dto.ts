@@ -4,8 +4,8 @@ import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, MaxLengt
 
 export class CreateProductDto {
     @ApiProperty({
-        description: 'Nombre de la categoria',
-        example: 'Electronica',
+        description: 'Nombre del producto',
+        example: 'Monitor 27 pulgadas',
         minLength: 3,
         maxLength: 50,
     })
@@ -17,7 +17,7 @@ export class CreateProductDto {
 
     @ApiProperty({
         description: 'Descripcion del producto',
-        example: 'Electronica',
+        example: 'Monitor Dell 27 pulgadas Full HD, 144Hz, 1920x1080',
         minLength: 3,
         maxLength: 150,
     })
@@ -42,10 +42,19 @@ export class CreateProductDto {
 
     @ApiProperty({
         description: 'Id de la categoria',
-        example: '12345678-1234-1234-1234-123456789012',
+        example: '002558a7-8453-49ad-a7b3-5741452f6c36',
     })
     @IsString()
     @IsUUID()
     @IsNotEmpty({ message: 'El id de la categoria no puede esta vacio' })
     categoryId: string;
+
+    @ApiProperty({
+        description: 'Imagen del producto',
+        type: 'string',
+        format: 'binary',
+        required: false,
+    })
+    @IsOptional()
+    file?: any;
 }
