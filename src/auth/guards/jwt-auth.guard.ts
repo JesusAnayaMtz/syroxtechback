@@ -4,8 +4,10 @@ import { Request } from 'express';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
+    //usamos canActivate para validar el token
     constructor(private jwtService: JwtService) { }
 
+    //validamos el token
     canActivate(context: ExecutionContext): boolean {
         const request = context.switchToHttp().getRequest<Request>();
         const token = request.headers.authorization?.split(' ')[1];
