@@ -2,8 +2,10 @@ import { Controller, Get, Post, Body, Param, Delete, Request, UseGuards, Unautho
 import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 
+@ApiBearerAuth()
 @Controller('sales')
 @UseGuards(JwtAuthGuard)
 export class SalesController {
