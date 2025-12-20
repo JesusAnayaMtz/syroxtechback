@@ -14,13 +14,13 @@ export class UsersController {
 
   @Get()
   findAllActive() {
-    return this.usersService.findAllActive();
+    return this.usersService.findAll();
   }
 
-  @Get('all')
+  @Get('active')
   // Endpoint to retrieve all users (including inactive ones)
   findAll() {
-    return this.usersService.findAll();
+    return this.usersService.findAllActive();
   }
 
   @Get(':id')
